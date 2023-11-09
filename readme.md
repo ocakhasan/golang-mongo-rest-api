@@ -36,3 +36,31 @@ Response
 
 To see how the end2end tests are done, please check [integrationtest](internal/controllers/integration_test) folder.
 
+## Run the project
+
+first create the mongo database.
+
+```bash
+docker-compose up -d mongo
+```
+
+then run
+
+```bash
+go run cmd/main.go
+```
+
+you will see
+
+```
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.11.3
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:3030
+```

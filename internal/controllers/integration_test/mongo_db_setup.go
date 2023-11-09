@@ -18,7 +18,6 @@ type TestDatabase struct {
 }
 
 func SetupTestDatabase() *TestDatabase {
-	// setup db container
 	ctx, _ := context.WithTimeout(context.Background(), time.Second*60)
 	container, dbInstance, dbAddr, err := createMongoContainer(ctx)
 	if err != nil {
@@ -37,7 +36,6 @@ func (tdb *TestDatabase) TearDown() {
 }
 
 func createMongoContainer(ctx context.Context) (testcontainers.Container, *mongo.Database, string, error) {
-
 	var env = map[string]string{
 		"MONGO_INITDB_ROOT_USERNAME": "root",
 		"MONGO_INITDB_ROOT_PASSWORD": "pass",
@@ -64,8 +62,6 @@ func createMongoContainer(ctx context.Context) (testcontainers.Container, *mongo
 	}
 
 	log.Println("mongo container ready and running at port: ", p.Port())
-
-	time.Sleep(time.Second)
 
 	uri := fmt.Sprintf("mongodb://root:pass@localhost:%s", p.Port())
 	db, err := database.NewMongoDatabase(uri)
