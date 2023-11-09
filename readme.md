@@ -44,6 +44,8 @@ first create the mongo database.
 docker-compose up -d mongo
 ```
 
+It will generate a new MongoDB container and populate the collections with some data.
+
 then run
 
 ```bash
