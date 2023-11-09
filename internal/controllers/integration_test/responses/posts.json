@@ -1,0 +1,54 @@
+{
+  "posts": [
+    {
+      "title": "Crime and Punishment",
+      "author": {
+        "name": "Dostoyevski",
+        "id": 1
+      },
+      "likes": 12,
+      "comments": [
+        {
+          "postTitle": "Crime and Punishment",
+          "comment": "great read",
+          "likes": 3
+        }
+      ]
+    },
+    {
+      "title": "Notes From The Underground",
+      "author": {
+        "name": "Dostoyevski",
+        "id": 1
+      },
+      "likes": 100,
+      "comments": [
+        {
+          "postTitle": "Notes From The Underground",
+          "comment": "good info",
+          "likes": 0
+        },
+        {
+          "postTitle": "Notes From The Underground",
+          "comment": "I liked this post",
+          "likes": 12
+        }
+      ]
+    },
+    {
+      "title": "Meditations",
+      "author": {
+        "name": "Marcus Aurelius",
+        "id": 2
+      },
+      "likes": 200,
+      "comments": [
+        {
+          "postTitle": "Meditations",
+          "comment": "very nice book",
+          "likes": 8
+        }
+      ]
+    }
+  ]
+}

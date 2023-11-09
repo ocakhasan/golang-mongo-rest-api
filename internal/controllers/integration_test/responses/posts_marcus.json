@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "title": "Meditations",
+      "author": {
+        "name": "Marcus Aurelius",
+        "id": 2
+      },
+      "likes": 200,
+      "comments": [
+        {
+          "postTitle": "Meditations",
+          "comment": "very nice book",
+          "likes": 8
+        }
+      ]
+    }
+  ]
+}
