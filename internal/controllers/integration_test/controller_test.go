@@ -77,3 +77,16 @@ func TestGetPostsByAuthorForMarcusAurelius(t *testing.T) {
 		BodyFromFile("responses/posts_marcus.json").
 		End()
 }
+
+func TestGetPosts_NonExistentAuthor(t *testing.T) {
+	userId := 10
+	apitest.New().
+		Handler(InitializeTestRouter()).
+		Get(fmt.Sprintf("/api/author/%d/posts", userId)).
+		Header("content-type", "application/json").
+		Expect(t).
+		Status(http.StatusOK).
+		Assert(jsonpath.Len(`$.posts`, 0)).
+		Assert(jsonpath.Equal("$.posts", []interface{}{})).
+		End()
+}
