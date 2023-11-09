@@ -90,3 +90,15 @@ func TestGetPosts_NonExistentAuthor(t *testing.T) {
 		Assert(jsonpath.Equal("$.posts", []interface{}{})).
 		End()
 }
+
+func TestGetPosts_BadAuthorId(t *testing.T) {
+	userId := "tesla"
+	apitest.New().
+		Handler(InitializeTestRouter()).
+		Get(fmt.Sprintf("/api/author/%s/posts", userId)).
+		Header("content-type", "application/json").
+		Expect(t).
+		Status(http.StatusBadRequest).
+		Assert(jsonpath.Equal("$.error", fmt.Sprintf("strconv.Atoi: parsing \"%s\": invalid syntax", userId))).
+		End()
+}
