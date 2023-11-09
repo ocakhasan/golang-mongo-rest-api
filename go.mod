@@ -1,10 +1,9 @@
 module github.com/ocakhasan/mongoapi
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/labstack/echo/v4 v4.11.3
-	github.com/magiconair/properties v1.8.7
 	github.com/steinfletcher/apitest v1.5.15
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/testcontainers/testcontainers-go v0.26.0
@@ -35,6 +34,7 @@ require (
 	github.com/klauspost/compress v1.16.0 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
+	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/moby/patternmatcher v0.6.0 // indirect
