@@ -1,0 +1,10 @@
+{
+  "book": {
+    "title": "The Idiot",
+    "author": {
+      "id": "654e618a60034d917aa0ae63",
+      "name": "Dostoyevski"
+    },
+    "likes": 0
+  }
+}

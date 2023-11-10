@@ -41,7 +41,7 @@ func (u PostsController) CreateBook() echo.HandlerFunc {
 			})
 		}
 
-		author, err := u.repo.GetAuthorById(c.Request().Context(), objId)
+		author, err := u.repo.GetAuthorById(c.Request().Context(), objId.Hex())
 		if err != nil {
 			if errors.Is(err, mongo.ErrNoDocuments) {
 				return c.JSON(http.StatusNotFound, map[string]interface{}{
@@ -52,7 +52,7 @@ func (u PostsController) CreateBook() echo.HandlerFunc {
 
 		createdBook, err := u.repo.CreateBook(c.Request().Context(), models.Book{
 			Title:  req.BookName,
-			Author: author,
+			Author: *author,
 			Likes:  0,
 		})
 
@@ -62,7 +62,7 @@ func (u PostsController) CreateBook() echo.HandlerFunc {
 			})
 		}
 
-		return c.JSON(http.StatusOK, map[string]interface{}{
+		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"book": createdBook,
 		})
 	}

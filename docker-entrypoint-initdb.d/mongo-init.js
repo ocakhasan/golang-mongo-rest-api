@@ -6,11 +6,11 @@ db.createCollection('comments');
 
 db.authors.insertMany([
     {
-        "_id": {"$oid": "654e618a60034d917aa0ae63"},
+        "id": "654e618a60034d917aa0ae63",
         "name": "Dostoyevski"
     },
     {
-        "_id": {"$oid": "654e619760034d917aa0ae64"},
+        "id": "654e619760034d917aa0ae64",
         "name": "Marcus Aurelius"
     }
 ])

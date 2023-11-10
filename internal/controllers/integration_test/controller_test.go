@@ -102,3 +102,27 @@ func TestGetPosts_BadAuthorId(t *testing.T) {
 		Assert(jsonpath.Equal("$.error", "the provided hex string is not a valid ObjectID")).
 		End()
 }
+
+func TestCreatePostSuccess(t *testing.T) {
+	apitest.New().
+		Handler(InitializeTestRouter()).
+		Post("/api/book").
+		Header("content-type", "application/json").
+		BodyFromFile("requests/create_book_success.json").
+		Expect(t).
+		Status(http.StatusCreated).
+		BodyFromFile("responses/create_book_response.json").
+		End()
+}
+
+func TestCreatePostAuthorNotExists(t *testing.T) {
+	apitest.New().
+		Handler(InitializeTestRouter()).
+		Post("/api/book").
+		Header("content-type", "application/json").
+		BodyFromFile("requests/create_book_author_not_exists.json").
+		Expect(t).
+		Status(http.StatusNotFound).
+		Assert(jsonpath.Equal("$.err", "author does not exist")).
+		End()
+}

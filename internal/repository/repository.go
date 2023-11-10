@@ -5,7 +5,6 @@ import (
 
 	"github.com/ocakhasan/mongoapi/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -16,7 +15,7 @@ var (
 type Repository interface {
 	GetBooksWithComments(ctx context.Context, filter PostFilter) ([]models.BookWithComments, error)
 	CreateBook(ctx context.Context, book models.Book) (models.Book, error)
-	GetAuthorById(ctx context.Context, id primitive.ObjectID) (models.Author, error)
+	GetAuthorById(ctx context.Context, id string) (*models.Author, error)
 }
 
 func New(db *mongo.Database) Repository {
@@ -36,13 +35,18 @@ func (m *mongoRepository) CreateBook(ctx context.Context, book models.Book) (mod
 	return book, nil
 }
 
-func (m *mongoRepository) GetAuthorById(ctx context.Context, id primitive.ObjectID) (models.Author, error) {
+func (m *mongoRepository) GetAuthorById(ctx context.Context, id string) (*models.Author, error) {
 	var author models.Author
-	if err := m.db.Collection("authors").FindOne(ctx, bson.M{"id": id}).Decode(&author); err != nil {
-		return models.Author{}, nil
+	res := m.db.Collection("authors").FindOne(ctx, bson.M{"id": id})
+	if res.Err() != nil {
+		return nil, res.Err()
 	}
 
-	return author, nil
+	if err := res.Decode(&author); err != nil {
+		return nil, err
+	}
+
+	return &author, nil
 }
 
 type PostFilter struct {
