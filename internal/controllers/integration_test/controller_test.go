@@ -43,51 +43,51 @@ func InitializeTestRouter() *echo.Echo {
 func TestGetPostsWithComments(t *testing.T) {
 	apitest.New().
 		Handler(InitializeTestRouter()).
-		Get("/api/posts").
+		Get("/api/books").
 		Header("content-type", "application/json").
 		Expect(t).
 		Status(http.StatusOK).
-		Assert(jsonpath.Len(`$.posts`, 3)).
-		BodyFromFile("responses/posts.json").
+		Assert(jsonpath.Len(`$.books`, 3)).
+		BodyFromFile("responses/books.json").
 		End()
 }
 
 func TestGetPostsByAuthorForDostoyevski(t *testing.T) {
-	userId := 1
+	userId := "654e618a60034d917aa0ae63"
 	apitest.New().
 		Handler(InitializeTestRouter()).
-		Get(fmt.Sprintf("/api/author/%d/posts", userId)).
+		Get(fmt.Sprintf("/api/author/%s/books", userId)).
 		Header("content-type", "application/json").
 		Expect(t).
 		Status(http.StatusOK).
-		Assert(jsonpath.Len(`$.posts`, 2)).
-		BodyFromFile("responses/posts_dostoyevski.json").
+		Assert(jsonpath.Len(`$.books`, 2)).
+		BodyFromFile("responses/books_dostoyevski.json").
 		End()
 }
 
 func TestGetPostsByAuthorForMarcusAurelius(t *testing.T) {
-	userId := 2
+	userId := "654e619760034d917aa0ae64"
 	apitest.New().
 		Handler(InitializeTestRouter()).
-		Get(fmt.Sprintf("/api/author/%d/posts", userId)).
+		Get(fmt.Sprintf("/api/author/%s/books", userId)).
 		Header("content-type", "application/json").
 		Expect(t).
 		Status(http.StatusOK).
-		Assert(jsonpath.Len(`$.posts`, 1)).
-		BodyFromFile("responses/posts_marcus.json").
+		Assert(jsonpath.Len(`$.books`, 1)).
+		BodyFromFile("responses/books_marcus.json").
 		End()
 }
 
 func TestGetPosts_NonExistentAuthor(t *testing.T) {
-	userId := 10
+	userId := "654e619760034d917aa0ae65"
 	apitest.New().
 		Handler(InitializeTestRouter()).
-		Get(fmt.Sprintf("/api/author/%d/posts", userId)).
+		Get(fmt.Sprintf("/api/author/%s/books", userId)).
 		Header("content-type", "application/json").
 		Expect(t).
 		Status(http.StatusOK).
-		Assert(jsonpath.Len(`$.posts`, 0)).
-		Assert(jsonpath.Equal("$.posts", []interface{}{})).
+		Assert(jsonpath.Len(`$.books`, 0)).
+		Assert(jsonpath.Equal("$.books", []interface{}{})).
 		End()
 }
 
@@ -95,10 +95,10 @@ func TestGetPosts_BadAuthorId(t *testing.T) {
 	userId := "tesla"
 	apitest.New().
 		Handler(InitializeTestRouter()).
-		Get(fmt.Sprintf("/api/author/%s/posts", userId)).
+		Get(fmt.Sprintf("/api/author/%s/books", userId)).
 		Header("content-type", "application/json").
 		Expect(t).
 		Status(http.StatusBadRequest).
-		Assert(jsonpath.Equal("$.error", fmt.Sprintf("strconv.Atoi: parsing \"%s\": invalid syntax", userId))).
+		Assert(jsonpath.Equal("$.error", "the provided hex string is not a valid ObjectID")).
 		End()
 }

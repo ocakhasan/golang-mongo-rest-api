@@ -1,10 +1,10 @@
 {
-  "posts": [
+  "books": [
     {
       "title": "Crime and Punishment",
       "author": {
-        "name": "Dostoyevski",
-        "id": 1
+        "id": "654e618a60034d917aa0ae63",
+        "name": "Dostoyevski"
       },
       "likes": 12,
       "comments": [
@@ -18,8 +18,8 @@
     {
       "title": "Notes From The Underground",
       "author": {
-        "name": "Dostoyevski",
-        "id": 1
+        "id": "654e618a60034d917aa0ae63",
+        "name": "Dostoyevski"
       },
       "likes": 100,
       "comments": [
@@ -38,8 +38,8 @@
     {
       "title": "Meditations",
       "author": {
-        "name": "Marcus Aurelius",
-        "id": 2
+        "id": "654e619760034d917aa0ae64",
+        "name": "Marcus Aurelius"
       },
       "likes": 200,
       "comments": [

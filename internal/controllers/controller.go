@@ -1,11 +1,14 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/ocakhasan/mongoapi/internal/models"
 	"github.com/ocakhasan/mongoapi/internal/repository"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type PostsController struct {
@@ -16,9 +19,58 @@ func New(repo repository.Repository) *PostsController {
 	return &PostsController{repo: repo}
 }
 
-func (u PostsController) GetPostsWithComments() echo.HandlerFunc {
+type CreateBookRequest struct {
+	AuthorId string `json:"author_id"`
+	BookName string `json:"book_name"`
+}
+
+func (u PostsController) CreateBook() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		posts, err := u.repo.GetPostsWithComments(c.Request().Context(), repository.PostFilter{})
+		req := new(CreateBookRequest)
+
+		if err := c.Bind(&req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"err": err.Error(),
+			})
+		}
+
+		objId, err := primitive.ObjectIDFromHex(req.AuthorId)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"err": err.Error(),
+			})
+		}
+
+		author, err := u.repo.GetAuthorById(c.Request().Context(), objId)
+		if err != nil {
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return c.JSON(http.StatusNotFound, map[string]interface{}{
+					"err": "author does not exist",
+				})
+			}
+		}
+
+		createdBook, err := u.repo.CreateBook(c.Request().Context(), models.Book{
+			Title:  req.BookName,
+			Author: author,
+			Likes:  0,
+		})
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"err": err.Error(),
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"book": createdBook,
+		})
+	}
+}
+
+func (u PostsController) GetBooksWithComments() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		posts, err := u.repo.GetBooksWithComments(c.Request().Context(), repository.PostFilter{})
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
 				"error": err.Error(),
@@ -26,24 +78,25 @@ func (u PostsController) GetPostsWithComments() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"posts": posts,
+			"books": posts,
 		})
 	}
 }
 
-func (u PostsController) GetAuthorPostsWithComments() echo.HandlerFunc {
+func (u PostsController) GetAuthorBooksWithComments() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		authorId := c.Param("id")
 
-		intAuthorId, err := strconv.Atoi(authorId)
+		// validate the id
+		_, err := primitive.ObjectIDFromHex(authorId)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"error": err.Error(),
 			})
 		}
 
-		posts, err := u.repo.GetPostsWithComments(c.Request().Context(), repository.PostFilter{
-			AuthorId: &intAuthorId,
+		posts, err := u.repo.GetBooksWithComments(c.Request().Context(), repository.PostFilter{
+			AuthorId: &authorId,
 		})
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
@@ -52,7 +105,7 @@ func (u PostsController) GetAuthorPostsWithComments() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"posts": posts,
+			"books": posts,
 		})
 	}
 }

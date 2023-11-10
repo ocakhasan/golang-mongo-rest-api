@@ -5,6 +5,7 @@ import (
 
 	"github.com/ocakhasan/mongoapi/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -13,7 +14,9 @@ var (
 )
 
 type Repository interface {
-	GetPostsWithComments(ctx context.Context, filter PostFilter) ([]models.PostWithComments, error)
+	GetBooksWithComments(ctx context.Context, filter PostFilter) ([]models.BookWithComments, error)
+	CreateBook(ctx context.Context, book models.Book) (models.Book, error)
+	GetAuthorById(ctx context.Context, id primitive.ObjectID) (models.Author, error)
 }
 
 func New(db *mongo.Database) Repository {
@@ -24,11 +27,29 @@ type mongoRepository struct {
 	db *mongo.Database
 }
 
-type PostFilter struct {
-	AuthorId *int
+func (m *mongoRepository) CreateBook(ctx context.Context, book models.Book) (models.Book, error) {
+	_, err := m.db.Collection("books").InsertOne(ctx, book)
+	if err != nil {
+		return models.Book{}, err
+	}
+
+	return book, nil
 }
 
-func (m *mongoRepository) GetPostsWithComments(ctx context.Context, filter PostFilter) ([]models.PostWithComments, error) {
+func (m *mongoRepository) GetAuthorById(ctx context.Context, id primitive.ObjectID) (models.Author, error) {
+	var author models.Author
+	if err := m.db.Collection("authors").FindOne(ctx, bson.M{"id": id}).Decode(&author); err != nil {
+		return models.Author{}, nil
+	}
+
+	return author, nil
+}
+
+type PostFilter struct {
+	AuthorId *string
+}
+
+func (m *mongoRepository) GetBooksWithComments(ctx context.Context, filter PostFilter) ([]models.BookWithComments, error) {
 	pipeline := mongo.Pipeline{}
 
 	if filter.AuthorId != nil {
@@ -48,12 +69,12 @@ func (m *mongoRepository) GetPostsWithComments(ctx context.Context, filter PostF
 
 	pipeline = append(pipeline, lookupStage)
 
-	cur, err := m.db.Collection("posts").Aggregate(ctx, pipeline)
+	cur, err := m.db.Collection("books").Aggregate(ctx, pipeline)
 	if err != nil {
 		return nil, err
 	}
 
-	var res = make([]models.PostWithComments, 0)
+	var res = make([]models.BookWithComments, 0)
 	err = cur.All(ctx, &res)
 	if err != nil {
 		return nil, err

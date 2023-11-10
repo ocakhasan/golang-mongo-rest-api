@@ -1,10 +1,10 @@
 {
-  "posts": [
+  "books": [
     {
       "title": "Meditations",
       "author": {
-        "name": "Marcus Aurelius",
-        "id": 2
+        "id": "654e619760034d917aa0ae64",
+        "name": "Marcus Aurelius"
       },
       "likes": 200,
       "comments": [

@@ -10,8 +10,9 @@ func Initialize(controller *controllers.PostsController) *echo.Echo {
 
 	api := e.Group("/api")
 
-	api.GET("/posts", controller.GetPostsWithComments())
-	api.GET("/author/:id/posts", controller.GetAuthorPostsWithComments())
+	api.GET("/books", controller.GetBooksWithComments())
+	api.POST("/book", controller.CreateBook())
+	api.GET("/author/:id/books", controller.GetAuthorBooksWithComments())
 
 	return e
 }

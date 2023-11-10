@@ -8,28 +8,39 @@ import (
 )
 
 func populateDB() {
-	var posts = []interface{}{
-		models.Post{
+	var authors = []interface{}{
+		models.Author{
+			Id:   "654e618a60034d917aa0ae63",
+			Name: "Dostoyevski",
+		},
+		models.Author{
+			Id:   "654e619760034d917aa0ae64",
+			Name: "Marcus Aurelius",
+		},
+	}
+
+	var books = []interface{}{
+		models.Book{
 			Title: "Crime and Punishment",
 			Author: models.Author{
 				Name: "Dostoyevski",
-				Id:   1,
+				Id:   "654e618a60034d917aa0ae63",
 			},
 			Likes: 12,
 		},
-		models.Post{
+		models.Book{
 			Title: "Notes From The Underground",
 			Author: models.Author{
 				Name: "Dostoyevski",
-				Id:   1,
+				Id:   "654e618a60034d917aa0ae63",
 			},
 			Likes: 100,
 		},
-		models.Post{
+		models.Book{
 			Title: "Meditations",
 			Author: models.Author{
 				Name: "Marcus Aurelius",
-				Id:   2,
+				Id:   "654e619760034d917aa0ae64",
 			},
 			Likes: 200,
 		},
@@ -58,7 +69,7 @@ func populateDB() {
 		},
 	}
 
-	_, err := testDbInstance.Collection("posts").InsertMany(context.Background(), posts)
+	_, err := testDbInstance.Collection("books").InsertMany(context.Background(), books)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,5 +77,10 @@ func populateDB() {
 	_, err2 := testDbInstance.Collection("comments").InsertMany(context.Background(), comments)
 	if err2 != nil {
 		log.Fatal(err2)
+	}
+
+	_, err3 := testDbInstance.Collection("authors").InsertMany(context.Background(), authors)
+	if err3 != nil {
+		log.Fatal(err3)
 	}
 }

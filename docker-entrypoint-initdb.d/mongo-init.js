@@ -1,12 +1,24 @@
 db = db.getSiblingDB('test');
 
-db.createCollection('posts');
+db.createCollection('books');
+db.createCollection('authors');
 db.createCollection('comments');
 
-db.posts.insertMany([
+db.authors.insertMany([
+    {
+        "_id": {"$oid": "654e618a60034d917aa0ae63"},
+        "name": "Dostoyevski"
+    },
+    {
+        "_id": {"$oid": "654e619760034d917aa0ae64"},
+        "name": "Marcus Aurelius"
+    }
+])
+
+db.books.insertMany([
     {
         "author": {
-            "id": 1,
+            "id": "654e618a60034d917aa0ae63",
             "name": "Dostoyevski"
         },
         "likes": 12,
@@ -14,7 +26,7 @@ db.posts.insertMany([
     },
     {
         "author": {
-            "id": 1,
+            "id": "654e618a60034d917aa0ae63",
             "name": "Dostoyevski"
         },
         "likes": 100,
@@ -22,7 +34,7 @@ db.posts.insertMany([
     },
     {
         "author": {
-            "id": 2,
+            "id": "654e619760034d917aa0ae64",
             "name": "Marcus Aurelius"
         },
         "likes": 200,
