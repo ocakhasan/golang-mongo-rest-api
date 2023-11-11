@@ -1,5 +1,8 @@
 # Golang, MongoDB Rest Api With Integration Tests
 
+To check the blog related to this repository: [Writing Integration Tests, A Comprehensive Guide for REST API with MongoDB
+](https://ocakhasan.github.io/golang-mongo-db-rest-api-integration-tests/)
+
 This is a simple project to demonstrate how to do integration tests
 for your API's with golang.
 
